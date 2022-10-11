@@ -1,25 +1,31 @@
 package agh.ics.oop;
 
 
+
 public class World {
 
-    public static void main(String[] args)
+    public static Direction[] convert(String[] args)
     {
-        System.out.println("system wystartowal");
-        Direction[] strArr = new Direction[args.length];
+        Direction[] dirArr = new Direction[args.length];
         int i = 0;
         for(String s: args)
         {
             switch (s)
             {
-                case "f" -> strArr[i] = Direction.FORWARD;
-                case "r" -> strArr[i] = Direction.RIGHT;
-                case "l" -> strArr[i] = Direction.LEFT;
-                case "b" -> strArr[i] = Direction.BACKWARD;
+                case "f" -> dirArr[i] = Direction.FORWARD;
+                case "r" -> dirArr[i] = Direction.RIGHT;
+                case "l" -> dirArr[i] = Direction.LEFT;
+                case "b" -> dirArr[i] = Direction.BACKWARD;
             }
             i=i+1;
         }
-        run(strArr);
+
+        return dirArr;
+    }
+    public static void main(String[] args)
+    {
+        System.out.println("system wystartowal");
+        run(convert(args));
         System.out.println("system zakonczyl dzialanianie");
     }
 
@@ -37,7 +43,7 @@ public class World {
 
                 case BACKWARD:
                 {
-                    System.out.println("Zwierzak idzie do tyłu");
+                    System.out.println("Zwierzak idzie do tylu");
                     break;
                 }
 
