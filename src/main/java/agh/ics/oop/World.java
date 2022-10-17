@@ -16,6 +16,7 @@ public class World {
                 case "r" -> dirArr[i] = Direction.RIGHT;
                 case "l" -> dirArr[i] = Direction.LEFT;
                 case "b" -> dirArr[i] = Direction.BACKWARD;
+                default -> dirArr[i] = Direction.UNKNOWN;
             }
             i=i+1;
         }
