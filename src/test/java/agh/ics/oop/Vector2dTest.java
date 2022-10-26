@@ -44,24 +44,28 @@ class Vector2dTest {
         Vector2d v1 = new Vector2d(1,1);
         Vector2d v2 = new Vector2d(0,0);
 
+
+
         assertEquals(v0.add(v1),v2);
         assertEquals(v1.add(v0),v2);
         assertEquals(v1.add(v2), new Vector2d(1,1));
         assertEquals(v2.add(v1), new Vector2d(1,1));
         assertEquals(v0.add(v0), new Vector2d(-2,-2));
+
     }
 
     @Test
-    void substract() {
+    void subtract() {
         Vector2d v0 = new Vector2d(-1,-1);
         Vector2d v1 = new Vector2d(1,1);
         Vector2d v2 = new Vector2d(0,0);
 
-        assertEquals(v0.substract(v1),new Vector2d(-2,-2));
-        assertEquals(v1.substract(v0),new Vector2d(2,2));
-        assertEquals(v1.substract(v2), new Vector2d(1,1));
-        assertEquals(v2.substract(v1), new Vector2d(-1,-1));
-        assertEquals(v1.substract(v1), new Vector2d(0,0));
+        assertEquals(v0.subtract(v1),new Vector2d(-2,-2));
+        assertEquals(v1.subtract(v0),new Vector2d(2,2));
+        assertEquals(v1.subtract(v2), new Vector2d(1,1));
+        assertEquals(v2.subtract(v1), new Vector2d(-1,-1));
+        assertEquals(v1.subtract(v1), new Vector2d(0,0));
+
 
     }
 

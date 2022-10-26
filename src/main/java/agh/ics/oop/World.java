@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 
-
 public class World {
 
     public static Direction[] convert(String[] args)
@@ -28,6 +27,18 @@ public class World {
         System.out.println("system wystartowal");
         run(convert(args));
         System.out.println("system zakonczyl dzialanianie");
+        MoveDirection[] dirArr = OptionsParser.parse(args);
+        for(MoveDirection mv: dirArr) {
+            System.out.println(mv);
+        }
+
+        Animal an1 = new Animal();
+        System.out.println(an1);
+        for(MoveDirection mv: dirArr) {
+            an1.move(mv);
+            System.out.println(an1);
+        }
+
     }
 
     public static void run(Direction[] directions)
