@@ -62,26 +62,6 @@ public class Animal {
         }
     }
 
-        /*if(direction == MoveDirection.RIGHT) {
-            this.orientation = this.orientation.next();
-        }
-        else if(direction == MoveDirection.LEFT) {
-            this.orientation = this.orientation.previous();
-        }
-        else if(direction == MoveDirection.FORWARD) {
-            Vector2d npos = this.position.add(this.orientation.toUnitVector());
-            if(map.canMoveTo(npos)) {
-                this.position = npos;
-            }
-        }
-        else if(direction == MoveDirection.BACKWARD) {
-            Vector2d npos = this.position.subtract(this.orientation.toUnitVector());
-            if(map.canMoveTo(npos)) {
-                this.position = npos;
-            }
-        }
-    }*/
-
     public Vector2d getPosition() {
         return this.position;
     }
