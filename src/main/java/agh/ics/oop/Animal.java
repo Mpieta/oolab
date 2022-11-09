@@ -1,12 +1,25 @@
 package agh.ics.oop;
 
 public class Animal {
-    private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position = new Vector2d(2,2);
+    private MapDirection orientation;
+    private Vector2d position;
+    private IWorldMap map;
 
+    public Animal(){
+        this.orientation = MapDirection.NORTH;
+        this.position = new Vector2d(2,2);
+    }
+    public Animal(IWorldMap map) {
+        this.map = map;
+    }
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        this.map = map;
+        this.position = initialPosition;
+        this.orientation = MapDirection.NORTH;
+    }
 
     public String toString(){
-        return position.toString() + ";" + orientation.toString();
+        return this.orientation.toString();
     }
 
     public boolean isAt(Vector2d pos) {
@@ -19,7 +32,35 @@ public class Animal {
 
     public void move(MoveDirection direction) {
 
-        if(direction == MoveDirection.RIGHT) {
+        switch (direction) {
+            case RIGHT: {
+                this.orientation = this.orientation.next();
+                break;
+            }
+            case LEFT: {
+                this.orientation = this.orientation.previous();
+                break;
+            }
+            case FORWARD: {
+                Vector2d npos = this.position.add(this.orientation.toUnitVector());
+                if (this.map.canMoveTo(npos)) {
+                    this.position = npos;
+                }
+                break;
+            }
+            case BACKWARD: {
+                Vector2d npos = this.position.subtract(this.orientation.toUnitVector());
+                if (this.map.canMoveTo(npos)) {
+                    this.position = npos;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+        /*if(direction == MoveDirection.RIGHT) {
             this.orientation = this.orientation.next();
         }
         else if(direction == MoveDirection.LEFT) {
@@ -27,16 +68,20 @@ public class Animal {
         }
         else if(direction == MoveDirection.FORWARD) {
             Vector2d npos = this.position.add(this.orientation.toUnitVector());
-            if(npos.follows(new Vector2d(0,0)) && npos.precedes(new Vector2d(4,4))) {
+            if(map.canMoveTo(npos)) {
                 this.position = npos;
             }
         }
         else if(direction == MoveDirection.BACKWARD) {
             Vector2d npos = this.position.subtract(this.orientation.toUnitVector());
-            if(npos.follows(new Vector2d(0,0)) && npos.precedes(new Vector2d(4,4))) {
+            if(map.canMoveTo(npos)) {
                 this.position = npos;
             }
         }
+    }*/
+
+    public Vector2d getPosition() {
+        return this.position;
     }
 
 

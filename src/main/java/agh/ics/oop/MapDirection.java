@@ -11,11 +11,11 @@ public enum MapDirection
     public String toString()
     {
         return switch (this) {
-            case NORTH -> "Polnoc";
-            case EAST -> "Wschod";
-            case SOUTH -> "Poludnie";
-            case WEST -> "Zachod";
-            default -> "Unknown";
+            case NORTH -> "N";
+            case EAST -> ">";
+            case SOUTH -> "S";
+            case WEST -> "<";
+            default -> "U";
         };
     }
 

@@ -29,7 +29,7 @@ class AnimalTest {
         };
 
         for(int i = 0;i< input.length;i++){
-            MoveDirection[] output = OptionsParser.parse(input[i]);
+            MoveDirection[] output = new OptionsParser().parse(input[i]);
             assertEquals(output.length, ans[i].length);
             for(int j = 0;j<output.length;j++) {
                 assertEquals(output[j], ans[i][j]);
@@ -121,7 +121,7 @@ class AnimalTest {
 
     static Animal moveInput(String[] inp) {
         Animal a1 = new Animal();
-        MoveDirection[] in = OptionsParser.parse(inp);
+        MoveDirection[] in = new OptionsParser().parse(inp);
         for(MoveDirection mv: in) {
             a1.move(mv);
         }

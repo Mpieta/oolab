@@ -4,7 +4,7 @@ public class OptionsParser {
 
 
 
-    public static MoveDirection[] parse(String[] str) {
+    public MoveDirection[] parse(String[] str) {
         int i = 0;
         int unknown_cnt = 0;
         MoveDirection[] dirArr = new MoveDirection[str.length];
