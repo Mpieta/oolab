@@ -8,10 +8,10 @@ public class MapDirectionTest {
 
     @Test
     void testToString() {
-        assertEquals(MapDirection.EAST.toString(), "Wschod");
-        assertEquals(MapDirection.NORTH.toString(), "Polnoc");
-        assertEquals(MapDirection.SOUTH.toString(), "Poludnie");
-        assertEquals(MapDirection.WEST.toString(), "Zachod");
+        assertEquals(MapDirection.EAST.toString(), ">");
+        assertEquals(MapDirection.NORTH.toString(), "N");
+        assertEquals(MapDirection.SOUTH.toString(), "S");
+        assertEquals(MapDirection.WEST.toString(), "<");
     }
 
     @Test

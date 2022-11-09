@@ -6,8 +6,10 @@ public class Animal {
     private IWorldMap map;
 
     public Animal(){
+
         this.orientation = MapDirection.NORTH;
         this.position = new Vector2d(2,2);
+        this.map = new RectangularMap(5,5);
     }
     public Animal(IWorldMap map) {
         this.map = map;
