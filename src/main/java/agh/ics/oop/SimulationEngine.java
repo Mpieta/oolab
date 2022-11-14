@@ -41,6 +41,7 @@ public class SimulationEngine implements IEngine{
                 f.setTitle(currMove);
                 t.setText(str);
             }
+            System.out.println((RectangularMap)this.map);
         }
 
     }
