@@ -54,7 +54,6 @@ class RectangularMapTest {
     @Test
     void canMoveTo() {
         RectangularMap map = new RectangularMap(10,5);
-
         Vector2d[] animalPositions = {
                 new Vector2d(2,2),
                 new Vector2d(4,3),

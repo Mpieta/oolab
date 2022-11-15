@@ -21,28 +21,25 @@ public class SimulationEngine implements IEngine{
 
     @Override
     public void run() throws InterruptedException {
-        if(this.map instanceof RectangularMap) {
-            ArrayList<Animal> animalList = ((RectangularMap) this.map).animalList;
-            //System.out.println((RectangularMap)this.map);
+        ArrayList<IMapElement> animalList = ((AbstractWorldMap) this.map).elementList.get(0);
+        //System.out.println((RectangularMap)this.map);
 
-            JFrame f = new JFrame("animals");
-            JTextArea t = new JTextArea("");
-            JPanel p = new JPanel();
-            p.add(t);
-            f.add(p);
+        JFrame f = new JFrame("animals");
+        JTextArea t = new JTextArea("");
+        JPanel p = new JPanel();
+        p.add(t);
+        f.add(p);
 
-            f.setSize(300,300);
-            f.show();
-            for(int i = 0; i<moves.length;i++) {
-                Thread.sleep(500);
-                animalList.get(i%animalList.size()).move(this.moves[i]);
-                String str = this.map.toString();
-                String currMove = this.moves[i].toString();
-                f.setTitle(currMove);
-                t.setText(str);
-            }
-            System.out.println((RectangularMap)this.map);
+        f.setSize(300,300);
+        f.show();
+        for(int i = 0; i<moves.length;i++) {
+            Thread.sleep(500);
+            ((Animal) animalList.get(i%animalList.size())).move(this.moves[i]);
+            String str = this.map.toString();
+            String currMove = this.moves[i].toString();
+            f.setTitle(currMove);
+            t.setText(str);
         }
-
+            System.out.println(this.map);
     }
 }
