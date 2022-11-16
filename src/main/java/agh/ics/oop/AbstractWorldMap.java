@@ -7,6 +7,8 @@ public abstract class AbstractWorldMap implements IWorldMap {
     public Vector2d upper;
 
     protected ArrayList<ArrayList<IMapElement>> elementList;
+    // 0th list: animals:
+    // 1st: grass
 
     MapVisualizer visualiser;
 

@@ -89,13 +89,14 @@ public class GrassField extends AbstractWorldMap{
                 this.elementList.get(0).add(animal);
                 this.lower = this.lower.lowerLeft(animal.getPosition());
                 this.upper = this.upper.upperRight(animal.getPosition());
+                handleMovement(animal);
                 return true;
             }
             return false;
         }
     }
 
-    public Vector2d newGrassPosition(Grass g){ //TODO: change generating method
+    public Vector2d newGrassPosition(Grass g){
         Random rng = new Random();
         int range = (int) Math.sqrt(10*initialN);
         int x =rng.nextInt(range);
