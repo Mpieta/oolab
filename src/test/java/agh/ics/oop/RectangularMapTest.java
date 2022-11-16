@@ -49,8 +49,6 @@ class RectangularMapTest {
 
     }
 
-
-
     @Test
     void canMoveTo() {
         RectangularMap map = new RectangularMap(10,5);

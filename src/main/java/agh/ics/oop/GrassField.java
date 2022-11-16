@@ -39,6 +39,25 @@ public class GrassField extends AbstractWorldMap{
         return grassPositions;
 
     }
+
+    void setNewBoundaries(){
+        Vector2d clow = new Vector2d(-1*Integer.MAX_VALUE, -1*Integer.MAX_VALUE);
+        Vector2d chigh = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for(ArrayList<IMapElement> elList: this.elementList){
+            for(IMapElement el: elList) {
+                clow = clow.upperRight(el.getPosition());
+                chigh = chigh.lowerLeft(el.getPosition());
+            }
+        }
+        if(clow.follows(chigh)){
+            Vector2d temp = clow;
+            clow = chigh;
+            chigh = temp;
+        }
+        this.lower = clow;
+        this.upper = chigh;
+    }
     public GrassField(int n) {
         this.elementList = new ArrayList<>();
         this.elementList.add(new ArrayList<IMapElement>());
@@ -74,5 +93,51 @@ public class GrassField extends AbstractWorldMap{
             }
             return false;
         }
+    }
+
+    public Vector2d newGrassPosition(Grass g){ //TODO: change generating method
+        Random rng = new Random();
+        int range = (int) Math.sqrt(10*initialN);
+        int x =rng.nextInt(range);
+        int y =rng.nextInt(range);
+
+        while(isOccupied(new Vector2d(x,y))) {
+            x = rng.nextInt(range);
+            y = rng.nextInt(range);
+        }
+
+        return new Vector2d(x,y);
+    }
+
+    public boolean placeGrass(Grass g){
+        if(isOccupied(g.getPosition())){
+            return false;
+        }
+        this.initialN+=1;
+        this.elementList.get(1).add(g);
+        this.lower = this.lower.lowerLeft(g.getPosition());
+        this.upper = this.upper.upperRight(g.getPosition());
+        return true;
+    }
+
+    public Grass grassAt(Vector2d pos){
+        for (IMapElement el : this.elementList.get(1)) {
+            if(el.isAt(pos)){
+                return (Grass) el;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void handleMovement(Animal a) {
+        Vector2d newPos = a.getPosition();
+
+        Grass g = grassAt(newPos);
+        if(g!= null){
+            g.position = newGrassPosition(g);
+        }
+
+        this.setNewBoundaries();
     }
 }

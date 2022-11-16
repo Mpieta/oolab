@@ -39,4 +39,9 @@ public class RectangularMap extends AbstractWorldMap {
             return false;
         }
     }
+
+    @Override
+    public void handleMovement(Animal a) {
+        return;
+    }
 }

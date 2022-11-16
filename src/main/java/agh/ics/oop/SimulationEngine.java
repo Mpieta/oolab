@@ -35,6 +35,7 @@ public class SimulationEngine implements IEngine{
         for(int i = 0; i<moves.length;i++) {
             Thread.sleep(500);
             ((Animal) animalList.get(i%animalList.size())).move(this.moves[i]);
+            map.handleMovement((Animal) animalList.get(i%animalList.size()));
             String str = this.map.toString();
             String currMove = this.moves[i].toString();
             f.setTitle(currMove);

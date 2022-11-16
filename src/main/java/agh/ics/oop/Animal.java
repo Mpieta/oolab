@@ -47,8 +47,6 @@ public class Animal implements IMapElement {
             case FORWARD: {
                 Vector2d npos = this.position.add(this.orientation.toUnitVector());
                 if (this.map.canMoveTo(npos)) {
-                    ((AbstractWorldMap) this.map).lower = ((AbstractWorldMap) this.map).lower.lowerLeft(npos);
-                    ((AbstractWorldMap) this.map).upper = ((AbstractWorldMap) this.map).upper.upperRight(npos);
                     this.position = npos;
 
                 }
@@ -57,8 +55,6 @@ public class Animal implements IMapElement {
             case BACKWARD: {
                 Vector2d npos = this.position.subtract(this.orientation.toUnitVector());
                 if (this.map.canMoveTo(npos)) {
-                    ((AbstractWorldMap) this.map).lower = ((AbstractWorldMap) this.map).lower.lowerLeft(npos);
-                    ((AbstractWorldMap) this.map).upper = ((AbstractWorldMap) this.map).upper.upperRight(npos);
                     this.position = npos;
                 }
                 break;

@@ -6,8 +6,8 @@ public abstract class AbstractWorldMap implements IWorldMap {
     public Vector2d lower;
     public Vector2d upper;
 
-    protected ArrayList<ArrayList<IMapElement>> elementList; //list of lists of sorted in terms of visualising priority of an object type
-    // so far: animalList ----> grassList
+    protected ArrayList<ArrayList<IMapElement>> elementList;
+
     MapVisualizer visualiser;
 
     public String toString() {
@@ -24,8 +24,7 @@ public abstract class AbstractWorldMap implements IWorldMap {
         return true;
     }
 
-    @Override
-    public abstract boolean place(Animal animal);
+
 
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -50,5 +49,10 @@ public abstract class AbstractWorldMap implements IWorldMap {
         }
         return null;
     }
+
+    @Override
+    public abstract boolean place(Animal animal);
+
+    public abstract void handleMovement(Animal a);
 }
 

@@ -14,5 +14,10 @@ public class Grass implements IMapElement{
         return this.position.equals(position);
     }
 
+    @Override
+    public Vector2d getPosition() {
+        return this.position;
+    }
+
 
 }
