@@ -24,17 +24,8 @@ public class RectangularMap extends AbstractWorldMap {
             System.out.println(position);
             return false;
         }
-        return this.elements.get(0).containsKey(position);
+        return !this.elements.get(0).containsKey(position);
     }
-
-    /*@Override
-    public boolean place(Animal animal) {
-            if (canMoveTo(animal.getPosition())) {
-                this.elements.get(0).put(animal.getPosition(),animal);
-                return true;
-            }
-            return false;
-    }*/
 
     @Override
     public void handleMovement(Animal a) {

@@ -9,19 +9,7 @@ public class Animal implements IMapElement {
 
     private ArrayList<IPositionChangeObserver> observers = new ArrayList<>();
 
-    void addObserver(IPositionChangeObserver o){
-        this.observers.add(o);
-    }
 
-    void removeObserver(IPositionChangeObserver o){
-        this.observers.remove(o);
-    }
-
-    void positionChanged(Vector2d oldPosition, Vector2d newPosition){
-        for(IPositionChangeObserver o: this.observers){
-            o.positionChanged(oldPosition, newPosition);
-        }
-    }
 
     public Animal(){
 
@@ -39,6 +27,19 @@ public class Animal implements IMapElement {
         this.orientation = MapDirection.NORTH;
     }
 
+    void addObserver(IPositionChangeObserver o){
+        this.observers.add(o);
+    }
+
+    void removeObserver(IPositionChangeObserver o){
+        this.observers.remove(o);
+    }
+
+    void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for(IPositionChangeObserver o: this.observers){
+            o.positionChanged(oldPosition, newPosition);
+        }
+    }
     public String toString(){
         return this.orientation.toString();
     }
