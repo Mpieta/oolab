@@ -1,16 +1,19 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RectangularMap extends AbstractWorldMap {
 
 
     public RectangularMap(int width, int height) {
-        this.elementList = new ArrayList<>();
+        this.elements = new ArrayList<>();
+        this.elements.add(new HashMap<Vector2d, IMapElement>());
+
         this.lower = new Vector2d(0,0);
         this.upper = new Vector2d(width-1, height-1);
 
-        this.elementList.add(new ArrayList<IMapElement>());
+
         this.visualiser = new MapVisualizer(this);
 
     }
@@ -21,24 +24,17 @@ public class RectangularMap extends AbstractWorldMap {
             System.out.println(position);
             return false;
         }
-        for (IMapElement a : elementList.get(0)) {
-            if (a.isAt(position)) {
-                return false;
-            }
-        }
-        return true;
+        return this.elements.get(0).containsKey(position);
     }
 
-    @Override
+    /*@Override
     public boolean place(Animal animal) {
-        {
             if (canMoveTo(animal.getPosition())) {
-                this.elementList.get(0).add(animal);
+                this.elements.get(0).put(animal.getPosition(),animal);
                 return true;
             }
             return false;
-        }
-    }
+    }*/
 
     @Override
     public void handleMovement(Animal a) {

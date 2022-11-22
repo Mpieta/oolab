@@ -1,16 +1,27 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public abstract class AbstractWorldMap implements IWorldMap {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+
+    protected ArrayList<HashMap<Vector2d, IMapElement>> elements;
+    // 0th list: animals:
+    // 1st: grass
     public Vector2d lower;
     public Vector2d upper;
 
-    protected ArrayList<ArrayList<IMapElement>> elementList;
-    // 0th list: animals:
-    // 1st: grass
+
+
 
     MapVisualizer visualiser;
+
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        IMapElement obj = this.elements.get(0).get(oldPosition);
+
+        this.elements.get(0).remove(oldPosition);
+        this.elements.get(0).put(newPosition, obj);
+    }
 
     public String toString() {
         return this.visualiser.draw(this.lower, this.upper);
@@ -18,42 +29,45 @@ public abstract class AbstractWorldMap implements IWorldMap {
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        for (IMapElement a : elementList.get(0)) {
-            if (a.isAt(position)) {
-                return false;
-            }
-        }
-        return true;
+        return !this.elements.get(0).containsKey(position);
     }
+
 
 
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (ArrayList<IMapElement> elList : this.elementList) {
-            for (IMapElement el : elList) {
-                if (el.isAt(position)) {
-                    return true;
-                }
+        for(HashMap<Vector2d, IMapElement> map: this.elements){
+            if(map.containsKey(position)){
+                return true;
             }
         }
         return false;
+
     }
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (ArrayList<IMapElement> elList : this.elementList) {
-            for (IMapElement el : elList) {
-                if (el.isAt(position)) {
-                    return el;
-                }
+        for(HashMap<Vector2d, IMapElement> map: this.elements){
+            if(map.containsKey(position)){
+                return map.get(position);
             }
         }
         return null;
     }
 
     @Override
-    public abstract boolean place(Animal animal);
+    public boolean place(Animal animal) {
+        {
+            if (canMoveTo(animal.getPosition())) {
+                this.elements.get(0).put(animal.getPosition(), animal);
+                animal.addObserver(this);
+                handleMovement(animal);
+                return true;
+            }
+            return false;
+        }
+    }
 
     public abstract void handleMovement(Animal a);
 }

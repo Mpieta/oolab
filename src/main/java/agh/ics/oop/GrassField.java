@@ -1,12 +1,13 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
 public class GrassField extends AbstractWorldMap{
 
-    private int initialN;
+    public int initialN;
     public ArrayList<Vector2d> generateRandomGrassField(int n){
         int range = (int) Math.round(Math.sqrt(10*n));
         int current_num = 0;
@@ -40,14 +41,37 @@ public class GrassField extends AbstractWorldMap{
 
     }
 
+    public GrassField(int n) {
+        this.elements = new ArrayList<HashMap<Vector2d, IMapElement>>();
+        this.elements.add(new HashMap<Vector2d, IMapElement>());
+        this.elements.add(new HashMap<Vector2d, IMapElement>());
+        this.initialN = n;
+
+        ArrayList<Vector2d> grassPositions = this.generateRandomGrassField(n);
+        Vector2d tempHigh = new Vector2d(-1*Integer.MAX_VALUE,-1*Integer.MAX_VALUE);
+        Vector2d tempLow = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for(Vector2d pos: grassPositions){
+            tempLow = tempLow.lowerLeft(pos);
+            tempHigh = tempHigh.upperRight(pos);
+            Grass g = new Grass(pos);
+            this.elements.get(1).put(g.getPosition(), g);
+        }
+        this.lower = tempLow;
+        this.upper = tempHigh;
+        this.visualiser = new MapVisualizer(this);
+
+        System.out.println(tempHigh);
+    }
+
     void setNewBoundaries(){
         Vector2d clow = new Vector2d(-1*Integer.MAX_VALUE, -1*Integer.MAX_VALUE);
         Vector2d chigh = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-        for(ArrayList<IMapElement> elList: this.elementList){
-            for(IMapElement el: elList) {
-                clow = clow.upperRight(el.getPosition());
-                chigh = chigh.lowerLeft(el.getPosition());
+        for(HashMap<Vector2d, IMapElement> map: this.elements){
+            for(Vector2d el: map.keySet()) {
+                clow = clow.upperRight(el);
+                chigh = chigh.lowerLeft(el);
             }
         }
         if(clow.follows(chigh)){
@@ -58,45 +82,25 @@ public class GrassField extends AbstractWorldMap{
         this.lower = clow;
         this.upper = chigh;
     }
-    public GrassField(int n) {
-        this.elementList = new ArrayList<>();
-        this.elementList.add(new ArrayList<IMapElement>());
-        this.elementList.add(new ArrayList<IMapElement>());
-        this.initialN = n;
-
-        ArrayList<Vector2d> grassPositions = this.generateRandomGrassField(n);
-        Vector2d tempHigh = new Vector2d(0,0);
-        Vector2d tempLow = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-        for(Vector2d pos: grassPositions){
-            tempLow = tempLow.lowerLeft(pos);
-            tempHigh = tempHigh.upperRight(pos);
-            Grass g = new Grass(pos);
-            this.elementList.get(1).add(g);
-        }
-        this.lower = tempLow;
-        this.upper = tempHigh;
-        this.visualiser = new MapVisualizer(this);
-
-        System.out.println(tempHigh);
-    }
 
 
-    @Override
+
+    /*@Override
     public boolean place(Animal animal) {
         {
             if (canMoveTo(animal.getPosition())) {
-                this.elementList.get(0).add(animal);
+                this.elements.get(0).put(animal.getPosition(), animal);
                 this.lower = this.lower.lowerLeft(animal.getPosition());
                 this.upper = this.upper.upperRight(animal.getPosition());
+                animal.addObserver(this);
                 handleMovement(animal);
                 return true;
             }
             return false;
         }
-    }
+    }*/
 
-    public Vector2d newGrassPosition(Grass g){
+    public Vector2d newGrassPosition(){
         Random rng = new Random();
         int range = (int) Math.sqrt(10*initialN);
         int x =rng.nextInt(range);
@@ -115,28 +119,26 @@ public class GrassField extends AbstractWorldMap{
             return false;
         }
         this.initialN+=1;
-        this.elementList.get(1).add(g);
+        this.elements.get(1).put(g.getPosition(), g);
         this.lower = this.lower.lowerLeft(g.getPosition());
         this.upper = this.upper.upperRight(g.getPosition());
         return true;
     }
 
     public Grass grassAt(Vector2d pos){
-        for (IMapElement el : this.elementList.get(1)) {
-            if(el.isAt(pos)){
-                return (Grass) el;
-            }
-        }
-        return null;
+        return (Grass) this.elements.get(1).get(pos);
     }
 
     @Override
     public void handleMovement(Animal a) {
         Vector2d newPos = a.getPosition();
 
-        Grass g = grassAt(newPos);
-        if(g!= null){
-            g.position = newGrassPosition(g);
+        Grass g = (Grass) this.elements.get(1).get(newPos);
+        if(g!=null){
+            this.elements.get(1).remove(newPos);
+            Vector2d newGrassPos = newGrassPosition();
+            g.position = newGrassPos;
+            this.elements.get(1).put(newGrassPos,g);
         }
 
         this.setNewBoundaries();

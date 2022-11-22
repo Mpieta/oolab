@@ -11,7 +11,7 @@ class GrassFieldTest {
         String str = "f f f r f f f f r f f f f f r f f f f f f r f f f f f f f";
         String[] args = str.split(" ");
         MoveDirection[] directions = new OptionsParser().parse(args);
-        IWorldMap map = new GrassField(2);
+        IWorldMap map = new GrassField(3);
         Vector2d[] positions = {new Vector2d(0,0)};
         IEngine engine = new SimulationEngine(directions,map,positions);
         engine.run();
@@ -40,6 +40,6 @@ class GrassFieldTest {
         IEngine engine = new SimulationEngine(directions,map,positions);
         engine.run();
 
-        assertEquals(grassPlaced, map.elementList.get(1).size());
+        assertEquals(grassPlaced, map.elements.get(1).size());
     }
 }
