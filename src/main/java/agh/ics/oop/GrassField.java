@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -10,35 +11,24 @@ public class GrassField extends AbstractWorldMap{
     public int initialN;
     public ArrayList<Vector2d> generateRandomGrassField(int n){
         int range = (int) Math.round(Math.sqrt(10*n));
-        int current_num = 0;
-        int grass_left = n;
-        int fields_left = range*range+1;
-        ArrayList<Vector2d> grassPositions = new ArrayList<Vector2d>();
+        ArrayList<Vector2d> grassPositions = new ArrayList<>();
+        ArrayList<Vector2d> pos = new ArrayList<>();
         for(int i = 0;i<range;i++){
-            if(fields_left <= 0||grass_left==0){
-                break;
-            }
             for(int j = 0;j<range;j++){
-                if(fields_left <= 0 || grass_left==0){
-                    break;
-                }
-                fields_left -=1;
-                grass_left = n-current_num;
-                Random rng = new Random();
-
-                int rnd = Math.abs(rng.nextInt(range));
-                if(rnd%fields_left < grass_left) {
-                    current_num +=1;
-                    Vector2d p = new Vector2d(i,j);
-                    grassPositions.add(p);
-                    System.out.println(p);
-
-                }
+                pos.add(new Vector2d(i,j));
             }
         }
+        Collections.shuffle(pos);
 
+        int cnt = 0;
+        for(Vector2d v: pos){
+            if(cnt==n){
+                break;
+            }
+            grassPositions.add(v);
+            cnt+=1;
+        }
         return grassPositions;
-
     }
 
     public GrassField(int n) {
@@ -83,23 +73,6 @@ public class GrassField extends AbstractWorldMap{
         this.upper = chigh;
     }
 
-
-
-    /*@Override
-    public boolean place(Animal animal) {
-        {
-            if (canMoveTo(animal.getPosition())) {
-                this.elements.get(0).put(animal.getPosition(), animal);
-                this.lower = this.lower.lowerLeft(animal.getPosition());
-                this.upper = this.upper.upperRight(animal.getPosition());
-                animal.addObserver(this);
-                handleMovement(animal);
-                return true;
-            }
-            return false;
-        }
-    }*/
-
     public Vector2d newGrassPosition(){
         Random rng = new Random();
         int range = (int) Math.sqrt(10*initialN);
@@ -140,7 +113,6 @@ public class GrassField extends AbstractWorldMap{
             g.position = newGrassPos;
             this.elements.get(1).put(newGrassPos,g);
         }
-
         this.setNewBoundaries();
     }
 }

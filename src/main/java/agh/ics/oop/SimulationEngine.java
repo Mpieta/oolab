@@ -1,7 +1,11 @@
 package agh.ics.oop;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimulationEngine implements IEngine{
     private MoveDirection[] moves;
@@ -9,6 +13,11 @@ public class SimulationEngine implements IEngine{
     private Vector2d[] initialPositions;
 
     private ArrayList<Animal> animalList;
+
+    private JTextPane textPane;
+    private Timer timer;
+    private ArrayList<String> steps;
+
     public SimulationEngine(MoveDirection[] moves, IWorldMap map, Vector2d[] positions) {
         this.moves = moves;
         this.map = map;
@@ -22,29 +31,52 @@ public class SimulationEngine implements IEngine{
         }
     }
 
+    private JTextPane createFrame(AbstractWorldMap map){
+        Vector2d upper = map.upper;
+        Vector2d lower = map.lower;
+
+        Vector2d size = new Vector2d(400,400);
+
+        JFrame frame = new JFrame();
+        frame.setTitle("Animals");
+        frame.setSize(size.x, size.y);
+
+        JTextPane textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setBounds(0,0,size.x,size.y);
+
+        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
+        textPane.setFont(font);
+
+        frame.add(textPane);
+        frame.setVisible(true);
+
+        textPane.setText(this.steps.get(0));
+        this.timer = new Timer(500, e -> {
+            if(steps.size()==0){
+                timer.stop();
+                return;
+            }
+            textPane.setText(steps.get(0));
+            steps.remove(0);
+        });
+        timer.setRepeats(true);
+        timer.start();
+        return textPane;
+    }
+
 
     @Override
-    public void run() throws InterruptedException {
-        //System.out.println((RectangularMap)this.map);
+    public void run(){
+        this.steps = new ArrayList<>();
+        this.steps.add(map.toString());
 
-        JFrame f = new JFrame("animals");
-        JTextArea t = new JTextArea("");
-        JPanel p = new JPanel();
-        p.add(t);
-        f.add(p);
-
-        f.setSize(300,300);
-        f.show();
         for(int i = 0; i<moves.length;i++) {
-            Thread.sleep(500);
             Animal temp = this.animalList.get(i%this.animalList.size());
             temp.move(this.moves[i]);
             map.handleMovement(temp);
-            String str = this.map.toString();
-            String currMove = this.moves[i].toString();
-            f.setTitle(currMove);
-            t.setText(str);
+            this.steps.add(map.toString());
         }
-            System.out.println(this.map);
+        this.textPane = createFrame((AbstractWorldMap) map);
     }
 }

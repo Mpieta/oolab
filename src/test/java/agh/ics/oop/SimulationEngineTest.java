@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SimulationEngineTest {
 
     @Test
-    void collisionRectangularTest() throws InterruptedException {
+    void collisionRectangularTest() {
         String str = "f b r l f f r r f f f f f f f f";
         String[] args = str.split(" ");
         MoveDirection[] directions = new OptionsParser().parse(args);
@@ -28,7 +28,7 @@ class SimulationEngineTest {
     }
 
     @Test
-    void generalRectangularTest() throws InterruptedException {
+    void generalRectangularTest() {
         String str = "f f f f f r f f f f r f f r f f f f r f f f f f f r f f f f r f f f f f f f f f";
         String[] args = str.split(" ");
         MoveDirection[] directions = new OptionsParser().parse(args);

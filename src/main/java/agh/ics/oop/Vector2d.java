@@ -71,4 +71,8 @@ public class Vector2d {
         return this.x == t.x && this.y == t.y;
     }
 
+    public Vector2d multiply(Vector2d v){
+        return new Vector2d(this.x*v.x, this.y*v.y);
+    }
+
 }
