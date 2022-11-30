@@ -11,9 +11,9 @@ public enum MapDirection
     public String toString()
     {
         return switch (this) {
-            case NORTH -> "N";
+            case NORTH -> "^";
             case EAST -> ">";
-            case SOUTH -> "S";
+            case SOUTH -> "v";
             case WEST -> "<";
             default -> "U";
         };

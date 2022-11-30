@@ -40,11 +40,16 @@ class RectangularMapTest {
         };
 
         for(int i = 0;i< positions.length;i++) {
-            Animal a = new Animal(map, positions[i]);
-            assertEquals(map.place(a), results[i]);
-            if(map.place(a)) {
-                assertEquals(map.objectAt(positions[i]),a);
+            try{
+                Animal a = new Animal(map, positions[i]);
+                if(map.place(a)) {
+                    assertEquals(map.objectAt(positions[i]),a);
+                }
             }
+            catch(IllegalArgumentException exc){
+                assertFalse(results[i]);
+            }
+
         }
 
     }

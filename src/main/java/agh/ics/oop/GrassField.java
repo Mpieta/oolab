@@ -1,14 +1,12 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 
 public class GrassField extends AbstractWorldMap{
 
     public int initialN;
+    private MapBoundary boundaryObserver;
     public ArrayList<Vector2d> generateRandomGrassField(int n){
         int range = (int) Math.round(Math.sqrt(10*n));
         ArrayList<Vector2d> grassPositions = new ArrayList<>();
@@ -36,6 +34,7 @@ public class GrassField extends AbstractWorldMap{
         this.elements.add(new HashMap<Vector2d, IMapElement>());
         this.elements.add(new HashMap<Vector2d, IMapElement>());
         this.initialN = n;
+        this.boundaryObserver = new MapBoundary();
 
         ArrayList<Vector2d> grassPositions = this.generateRandomGrassField(n);
         Vector2d tempHigh = new Vector2d(-1*Integer.MAX_VALUE,-1*Integer.MAX_VALUE);
@@ -46,6 +45,7 @@ public class GrassField extends AbstractWorldMap{
             tempHigh = tempHigh.upperRight(pos);
             Grass g = new Grass(pos);
             this.elements.get(1).put(g.getPosition(), g);
+            this.boundaryObserver.addElement(g);
         }
         this.lower = tempLow;
         this.upper = tempHigh;
@@ -102,17 +102,35 @@ public class GrassField extends AbstractWorldMap{
         return (Grass) this.elements.get(1).get(pos);
     }
 
+    public boolean place(Animal animal) throws IllegalArgumentException{
+        {
+            if (canMoveTo(animal.getPosition())) {
+                this.elements.get(0).put(animal.getPosition(), animal);
+                animal.addObserver(this);
+                this.boundaryObserver.addElement(animal);
+                animal.addObserver(this.boundaryObserver);
+                handleMovement(animal);
+                return true;
+            }
+            throw new IllegalArgumentException(animal.getPosition() + " is not a valid position to place animal(position already occupied by another animal)");
+        }
+    }
+
     @Override
     public void handleMovement(Animal a) {
         Vector2d newPos = a.getPosition();
 
         Grass g = (Grass) this.elements.get(1).get(newPos);
-        if(g!=null){
+        if(g!=null) {
             this.elements.get(1).remove(newPos);
             Vector2d newGrassPos = newGrassPosition();
+            this.boundaryObserver.positionChanged(g.getPosition(), newGrassPos);
             g.position = newGrassPos;
-            this.elements.get(1).put(newGrassPos,g);
+
+            this.elements.get(1).put(newGrassPos, g);
+            this.boundaryObserver.addElement(a); //treeSet nie moze zawierać duplikatów, po kolizji grass z animal
+            // metoda positionChanged wywolana na trawie usunie również pozycje zwierzecia
         }
-        this.setNewBoundaries();
+        this.boundaryObserver.setNewBoundaries(this);
     }
 }

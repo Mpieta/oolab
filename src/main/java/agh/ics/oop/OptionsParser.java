@@ -4,36 +4,41 @@ public class OptionsParser {
 
 
 
-    public MoveDirection[] parse(String[] str) {
+    public MoveDirection[] parse(String[] str) throws IllegalArgumentException{
         int i = 0;
         int unknown_cnt = 0;
         MoveDirection[] dirArr = new MoveDirection[str.length];
         for(String s: str){
             switch(s) {
-                case "f", "forward" -> dirArr[i] = MoveDirection.FORWARD;
-                case "r", "right" -> dirArr[i] = MoveDirection.RIGHT;
-                case "l", "left" -> dirArr[i] = MoveDirection.LEFT;
-                case "b", "backward" -> dirArr[i] = MoveDirection.BACKWARD;
-                default -> {
-                    dirArr[i] = MoveDirection.UNKNOWN;
-                    unknown_cnt++;
-                }
+                case "f", "forward":
+                    dirArr[i] = MoveDirection.FORWARD;
+                    i++;
+                    break;
+                case "r", "right":
+                    dirArr[i] = MoveDirection.RIGHT;
+                    i++;
+                    break;
+                case "l", "left":
+                    dirArr[i] = MoveDirection.LEFT;
+                    i++;
+                    break;
+                case "b", "backward":
+                    dirArr[i] = MoveDirection.BACKWARD;
+                    i++;
+                    break;
+                default:
+                    throw new IllegalArgumentException(s + " is not a legal move specification");
+
             }
-            i++;
         }
 
         MoveDirection[] ret = new MoveDirection[str.length-unknown_cnt];
         i=0;
         for(MoveDirection mv: dirArr) {
-            if(mv != MoveDirection.UNKNOWN) {
-                ret[i] = mv;
-                i++;
-            }
+            ret[i] = mv;
+            i++;
         }
 
         return ret;
-
-
-
     }
 }

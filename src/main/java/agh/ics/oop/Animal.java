@@ -35,7 +35,7 @@ public class Animal implements IMapElement {
         this.observers.remove(o);
     }
 
-    void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+    void reportPositionChanged(Vector2d oldPosition, Vector2d newPosition){
         for(IPositionChangeObserver o: this.observers){
             o.positionChanged(oldPosition, newPosition);
         }
@@ -66,7 +66,7 @@ public class Animal implements IMapElement {
             case FORWARD: {
                 Vector2d npos = this.position.add(this.orientation.toUnitVector());
                 if (this.map.canMoveTo(npos)) {
-                    positionChanged(this.position, npos);
+                    reportPositionChanged(this.position, npos);
                     this.position = npos;
                 }
                 break;
@@ -74,7 +74,7 @@ public class Animal implements IMapElement {
             case BACKWARD: {
                 Vector2d npos = this.position.subtract(this.orientation.toUnitVector());
                 if (this.map.canMoveTo(npos)) {
-                    positionChanged(this.position, npos);
+                    reportPositionChanged(this.position, npos);
                     this.position = npos;
                 }
                 break;

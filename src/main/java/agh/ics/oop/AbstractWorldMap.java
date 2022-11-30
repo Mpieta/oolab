@@ -10,19 +10,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     // 1st: grass
     public Vector2d lower;
     public Vector2d upper;
-
-
-
-
     MapVisualizer visualiser;
-
+    @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
         IMapElement obj = this.elements.get(0).get(oldPosition);
 
         this.elements.get(0).remove(oldPosition);
         this.elements.get(0).put(newPosition, obj);
     }
-
+    @Override
     public String toString() {
         return this.visualiser.draw(this.lower, this.upper);
     }
@@ -31,9 +27,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public boolean canMoveTo(Vector2d position) {
         return !this.elements.get(0).containsKey(position);
     }
-
-
-
 
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -57,7 +50,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         {
             if (canMoveTo(animal.getPosition())) {
                 this.elements.get(0).put(animal.getPosition(), animal);
@@ -65,7 +58,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
                 handleMovement(animal);
                 return true;
             }
-            return false;
+            throw new IllegalArgumentException(animal.getPosition() + " is not a valid position to place animal(position already occupied or out of map)");
         }
     }
 

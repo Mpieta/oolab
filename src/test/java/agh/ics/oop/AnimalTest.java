@@ -28,11 +28,25 @@ class AnimalTest {
 
         };
 
+        boolean[] isException = {
+                false,
+                false,
+                true,
+                true,
+                true,
+                true
+        };
+
         for(int i = 0;i< input.length;i++){
-            MoveDirection[] output = new OptionsParser().parse(input[i]);
-            assertEquals(output.length, ans[i].length);
-            for(int j = 0;j<output.length;j++) {
-                assertEquals(output[j], ans[i][j]);
+            try {
+                MoveDirection[] output = new OptionsParser().parse(input[i]);
+                assertEquals(output.length, ans[i].length);
+                for (int j = 0; j < output.length; j++) {
+                    assertEquals(output[j], ans[i][j]);
+                }
+            }
+            catch(IllegalArgumentException exc){
+                assertTrue(isException[i]);
             }
         }
 

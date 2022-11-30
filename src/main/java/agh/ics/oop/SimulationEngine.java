@@ -25,9 +25,15 @@ public class SimulationEngine implements IEngine{
         this.animalList = new ArrayList<Animal>();
 
         for(int i = 0;i<initialPositions.length;i++) {
-            Animal a = new Animal(map,positions[i]);
-            this.animalList.add(a);
-            this.map.place(a);
+            try{
+                Animal a = new Animal(map,positions[i]);
+                this.animalList.add(a);
+                this.map.place(a);
+            }
+            catch(IllegalArgumentException exc){
+                System.out.println(exc);
+            }
+
         }
     }
 
