@@ -1,6 +1,5 @@
 package agh.ics.oop;
 
-
 import java.util.TreeSet;
 
 public class MapBoundary implements IPositionChangeObserver {
@@ -8,7 +7,7 @@ public class MapBoundary implements IPositionChangeObserver {
         if(o1.x==o2.x){
             return o1.y-o2.y;
         }
-        return o1.x - o2.x;
+        return o1.x -o2.x;
     });
     TreeSet<Vector2d> yPositions = new TreeSet<>((o1, o2) -> {
         if(o1.y==o2.y){

@@ -5,22 +5,28 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Map;
 
 public class App extends Application {
     private AbstractWorldMap map;
+    private GridPane gpane;
+    private SimulationEngine engine;
 
 
     @Override
     public void start(Stage primaryStage) {
+
+        VBox vbox = new VBox();
+        HBox hBox = new HBox();
+        TextField textField = new TextField();
+        Button button = new Button("Start");
+        hBox.getChildren().addAll(textField, button);
 
 
         GridPane gpane = new GridPane();
@@ -28,8 +34,21 @@ public class App extends Application {
         gpane.setPadding(new Insets(10,10,10,10));
         gpane.setGridLinesVisible(true);
 
-        Label label = new Label("Zwierzak");
-        Scene scene = new Scene(gpane, 400,400);
+        button.setOnAction(actionEvent -> {
+            try{
+                this.engine.setMoves(textField.getText());
+                Thread engineThread = new Thread((Runnable)engine);
+                engineThread.start();
+            }
+            catch (IllegalArgumentException e){
+                System.out.println(e);
+            }
+        });
+
+        vbox.getChildren().addAll(hBox, gpane);
+        this.gpane = gpane;
+
+        Scene scene = new Scene(vbox, 800,800);
 
         this.setPane(gpane);
         primaryStage.setScene(scene);
@@ -41,14 +60,15 @@ public class App extends Application {
         Vector2d upper = this.map.upper;
 
         for (int i=0; lower.x + i <= upper.x+1; i++){
-            gpane.getColumnConstraints().add(new ColumnConstraints(20));
+            gpane.getColumnConstraints().add(new ColumnConstraints(55));
         }
         for (int i=0; lower.y + i <= upper.y+1; i++){
-            gpane.getRowConstraints().add(new RowConstraints(20));
+            gpane.getRowConstraints().add(new RowConstraints(55));
         }
 
-        Label l = new Label("y/x");
+        Label l = new Label("y\\x");
         gpane.add(l, 0, 0);
+        GridPane.setHalignment(l, HPos.CENTER);
 
         for (int i = lower.x; i <= upper.x; i++){
             Label new_element = new Label(Integer.toString(i));
@@ -69,9 +89,10 @@ public class App extends Application {
                 if (map.isOccupied(new Vector2d(x,y))){
                     Object obj = this.map.objectAt(new Vector2d(x,y));
                     if (obj != null){
-                        Label item = new Label(obj.toString());
-                        GridPane.setHalignment(item, HPos.CENTER);
-                        gpane.add(item, x-lower.x+1, upper.y+1-y);
+                        GuiElementBox vbox = new GuiElementBox((IMapElement) obj);
+                        Label item = new Label();
+                        //GridPane.setHalignment(item, HPos.CENTER);
+                        gpane.add(vbox.vbox, x-lower.x+1, upper.y+1-y);
                     }
                 }
             }
@@ -79,26 +100,26 @@ public class App extends Application {
 
     }
 
+    public void updateMap(AbstractWorldMap newMap){
+        this.map = newMap;
+
+        this.gpane.setGridLinesVisible(false);
+        this.gpane.getColumnConstraints().clear();
+        this.gpane.getRowConstraints().clear();
+        this.gpane.getChildren().clear();
+        this.gpane.setGridLinesVisible(true);
+
+        setPane(gpane);
+    }
+
 
     @Override
     public void init() throws Exception {
         super.init();
-        MoveDirection[] directions = null;
-        try{
-            List<String> argsList = getParameters().getRaw();
-            String[] args = new String[argsList.size()];
-            argsList.toArray(args);
-            directions = new OptionsParser().parse(args);
-        }catch(IllegalArgumentException exc){
-            System.out.println(exc);
-            directions = new MoveDirection[]{};
-
-        }
 
         this.map = new GrassField(5);
-        Vector2d[] positions = { new Vector2d(0,0), new Vector2d(0,0)};
-        IEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
+        Vector2d[] positions = { new Vector2d(0,0), new Vector2d(4,4)};
+        this.engine = new SimulationEngine(map, positions, this);
 
 
 
